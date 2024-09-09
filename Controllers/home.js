@@ -1,49 +1,49 @@
-const Home = require('../Modals/home');
 const Users = require('../Modals/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.signup =  async(req,res) => {
-    try{
-        const user = req.body.user;
-        const pass = await bcrypt.hash(req.body.pass, 12);
-        const User = new Users({
-            name: user,
-            password: pass   
-        })
-        User.save();
-        res.render('signin')
-    }
-    catch(err){
-        console.log(err);
-    }
-}
-exports.signin =  async(req,res) => {
-    try{
-        const user = req.body.user;
-        Users.findOne({name: user })
-        .then(result => {
-            const token = jwt.sign({
-                id: result._id,
-                name: result.name,
-                password: result.password
-            },
-            "supersecret",
-            { expiresIn: '1h' }
-            )
-            const pass = bcrypt.compare(req.body.pass, result.password)
-            if(pass && user === result.name){
-                res.render('loginsucess', {
-                    token: token
-                })
-            }
-            else{
-                res.status(401).send('invalid')
-            }
-        })
-    }
-    catch(err){
-        console.log(err);
-    }
-}
 
+
+exports.home = (req,res) => {
+    const value = Number(req.query.num1) + Number(req.query.num2);
+    res.render('home', {
+        title: "hello tungle",
+        value: value
+    })
+}
+exports.signup = async(req,res) => {
+    try{
+        const name = req.body.user;
+        const pass = req.body.password;
+        const password = await bcrypt.hash(pass, 12)
+        const user = new Users({
+            name: name,
+            password: password
+        })
+        user.save().then(result => {
+            res.render('SignIn')
+        })
+    }
+    catch(err) {
+        console.log(err)
+    }
+}
+exports.signIn = async(req,res) => {
+    try{
+        console.log(req.body)
+        const name = req.body.user;
+        const pass = req.body.password;
+        const data = await Users.findOne({name: name})
+        console.log(data.password)
+        const valid = await bcrypt.compare(pass, data.password)
+      if(valid && name === data.name) {
+            res.render('login')
+        }
+        else{
+            res.send('invalid')
+        }
+    }
+    catch(err) {
+        console.log(err)
+    }
+}

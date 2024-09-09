@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body class="content">
+    {{{body}}}
+</body>
+<script src="socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    socket.on('connect');
+    const mess = document.getElementById('input');
+    const btn = document.getElementById('btn');
+    const box = document.getElementById('box');
+    socket.on('mess', function(mess){
+    const message = document.createElement('p');
+        message.innerHTML = mess;
+        box.appendChild(message);
+    })
+    btn.addEventListener('click', function() {
+        console.log(mess.value)
+        socket.emit('send', mess.value)
+    })
+</script>
+</html>

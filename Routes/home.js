@@ -1,15 +1,15 @@
 const express = require('express');
 const homeController = require('../Controllers/home');
-const home = require('../Modals/home');
 const routes = express.Router();
 
-routes.get('/', (req,res) => {
-    res.render('home', {
-        title: "hello nodeJS"
-    })
-});
+routes.get('/', homeController.home ) ;
+
 routes.post('/signup', homeController.signup );
 
-routes.post('/signin', homeController.signin );
+routes.get('/signIn', (req,res) => {
+    res.render('signIn');
+})
 
-module.exports = routes
+routes.post('/signIn', homeController.signIn );
+
+module.exports = routes;

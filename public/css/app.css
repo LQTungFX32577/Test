@@ -1,0 +1,10 @@
+.content {
+    text-align: center;
+}
+.form { 
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin-left: 800px;
+    margin-top: 200px;
+}
